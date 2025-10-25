@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mistério das Salas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #0a0014;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(40, 0, 60, 0.8) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(60, 0, 80, 0.6) 0%, transparent 20%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(70, 0, 100, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(100, 0, 130, 0.3) 0%, transparent 50%);
+            z-index: -1;
+        }
+        
+        .container {
+            text-align: center;
+            padding: 2rem;
+            max-width: 800px;
+            z-index: 1;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px rgba(170, 0, 255, 0.7);
+            color: #e6d0ff;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            color: #c9a8e8;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+        
+        .password-forms {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        .password-form {
+            background: rgba(30, 0, 50, 0.7);
+            border: 1px solid #4a1e6a;
+            border-radius: 10px;
+            padding: 1.5rem;
+            width: 300px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        .password-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #d4b3ff;
+        }
+        
+        .input-group {
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #c9a8e8;
+        }
+        
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(20, 0, 30, 0.8);
+            border: 1px solid #6b2b8f;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 1rem;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #a64dff;
+            box-shadow: 0 0 8px rgba(166, 77, 255, 0.5);
+        }
+        
+        .btn {
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #6a1b9a, #8e24aa);
+            color: #f3e5f5;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+        
+        .btn:hover {
+            background: linear-gradient(135deg, #8e24aa, #9c27b0);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(142, 36, 170, 0.4);
+        }
+        
+        .message-container {
+            margin-top: 2rem;
+            min-height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .message-box {
+            background: rgba(30, 0, 50, 0.8);
+            border: 1px solid #6b2b8f;
+            border-radius: 10px;
+            padding: 1.5rem 2rem;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+        
+        .message-box.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .message-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #d4b3ff;
+        }
+        
+        .message-content {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #e6d0ff;
+        }
+        
+        .instructions {
+            margin-top: 3rem;
+            color: #9c7bb8;
+            font-size: 0.9rem;
+            max-width: 600px;
+            line-height: 1.5;
+        }
+        
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        
+        .floating-element {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(170, 0, 255, 0.5);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+        
+        .music-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(30, 0, 50, 0.7);
+            border: 1px solid #6b2b8f;
+            border-radius: 50px;
+            padding: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .music-btn {
+            background: #6a1b9a;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .music-btn:hover {
+            background: #8e24aa;
+            transform: scale(1.1);
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .password-forms {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .password-form {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements" id="floatingElements"></div>
+    
+    <div class="container">
+        <h1>Mistério das Salas</h1>
+        <p class="subtitle">Cada sala guarda um segredo. Insira as senhas corretas para desvendar o mistério final.</p>
+        
+        <div class="password-forms">
+            <div class="password-form">
+                <div class="password-title">Sala Azul</div>
+                <div class="input-group">
+                    <label for="bluePassword">Senha:</label>
+                    <input type="password" id="bluePassword" placeholder="Digite a senha...">
+                </div>
+                <button class="btn" id="btnBlue">Verificar Senha</button>
+                <div id="blueResult" style="margin-top: 10px; color: #c9a8e8;"></div>
+            </div>
+            
+            <div class="password-form">
+                <div class="password-title">Sala Amarela</div>
+                <div class="input-group">
+                    <label for="yellowPassword">Senha:</label>
+                    <input type="password" id="yellowPassword" placeholder="Digite a senha...">
+                </div>
+                <button class="btn" id="btnYellow">Verificar Senha</button>
+                <div id="yellowResult" style="margin-top: 10px; color: #c9a8e8;"></div>
+            </div>
+        </div>
+        
+        <div class="message-container">
+            <div class="message-box" id="messageBox">
+                <div class="message-title">Parabéns!</div>
+                <div class="message-content" id="messageContent"></div>
+            </div>
+        </div>
+        
+        <p class="instructions">Descubra as senhas corretas para desbloquear a mensagem secreta.</p>
+    </div>
+
+    <div class="music-controls">
+        <button class="music-btn" id="playBtn">▶</button>
+        <button class="music-btn" id="pauseBtn">❚❚</button>
+        <button class="music-btn" id="stopBtn">■</button>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="https://assets.mixkit.co/music/preview/mixkit-mysterious-space-875.mp3" type="audio/mpeg">
+        Seu navegador não suporta o elemento de áudio.
+    </audio>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Criar elementos flutuantes
+            const floatingContainer = document.getElementById('floatingElements');
+            for (let i = 0; i < 50; i++) {
+                const element = document.createElement('div');
+                element.classList.add('floating-element');
+                element.style.left = Math.random() * 100 + 'vw';
+                element.style.animationDelay = Math.random() * 15 + 's';
+                element.style.width = (Math.random() * 3 + 1) + 'px';
+                element.style.height = element.style.width;
+                floatingContainer.appendChild(element);
+            }
+            
+            // Elementos da interface
+            const btnBlue = document.getElementById('btnBlue');
+            const btnYellow = document.getElementById('btnYellow');
+            const bluePassword = document.getElementById('bluePassword');
+            const yellowPassword = document.getElementById('yellowPassword');
+            const blueResult = document.getElementById('blueResult');
+            const yellowResult = document.getElementById('yellowResult');
+            const messageBox = document.getElementById('messageBox');
+            const messageContent = document.getElementById('messageContent');
+            
+            // Elementos de áudio
+            const bgMusic = document.getElementById('bgMusic');
+            const playBtn = document.getElementById('playBtn');
+            const pauseBtn = document.getElementById('pauseBtn');
+            const stopBtn = document.getElementById('stopBtn');
+            
+            // Estado das senhas
+            let blueCorrect = false;
+            let yellowCorrect = false;
+            
+            // Senhas corretas
+            const correctBluePassword = "euteamo";
+            const correctYellowPassword = "10112004";
+            
+            // Mensagem secreta
+            const secretMessage = "dsadasda";
+            
+            // Função para verificar a senha azul
+            btnBlue.addEventListener('click', function() {
+                if (bluePassword.value === correctBluePassword) {
+                    blueResult.textContent = "✓ Senha correta!";
+                    blueResult.style.color = "#a5d6a7";
+                    blueCorrect = true;
+                } else {
+                    blueResult.textContent = "✗ Senha incorreta! Tente novamente.";
+                    blueResult.style.color = "#ef9a9a";
+                    blueCorrect = false;
+                }
+                checkBothPasswords();
+            });
+            
+            // Função para verificar a senha amarela
+            btnYellow.addEventListener('click', function() {
+                if (yellowPassword.value === correctYellowPassword) {
+                    yellowResult.textContent = "✓ Senha correta!";
+                    yellowResult.style.color = "#a5d6a7";
+                    yellowCorrect = true;
+                } else {
+                    yellowResult.textContent = "✗ Senha incorreta! Tente novamente.";
+                    yellowResult.style.color = "#ef9a9a";
+                    yellowCorrect = false;
+                }
+                checkBothPasswords();
+            });
+            
+            // Função para verificar se ambas as senhas estão corretas
+            function checkBothPasswords() {
+                if (blueCorrect && yellowCorrect) {
+                    messageContent.textContent = secretMessage;
+                    messageBox.classList.add('show');
+                } else {
+                    messageBox.classList.remove('show');
+                }
+            }
+            
+            // Controles de música
+            playBtn.addEventListener('click', function() {
+                bgMusic.play();
+            });
+            
+            pauseBtn.addEventListener('click', function() {
+                bgMusic.pause();
+            });
+            
+            stopBtn.addEventListener('click', function() {
+                bgMusic.pause();
+                bgMusic.currentTime = 0;
+            });
+            
+            // Permitir verificação com Enter
+            bluePassword.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    btnBlue.click();
+                }
+            });
+            
+            yellowPassword.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    btnYellow.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
